@@ -104,7 +104,15 @@ exports.exportToken = async (req, res) => {
                 error: "Unauthorized"
             });
         }
+        console.log(
+            "Migration secret received:",
+            !!req.headers["x-migration-secret"]
+        );
 
+        console.log(
+            "Migration secret configured:",
+            !!process.env.TOKEN_MIGRATION_SECRET
+        );
         if (!etsy.accessToken || !etsy.refreshToken) {
             return res.status(400).json({
                 error: "No Etsy OAuth token found. Login first."
