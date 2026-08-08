@@ -1,5 +1,13 @@
-const express = require("express");
+const router = require("express").Router();
 
-const router = express.Router();
+const fileController = require("../controllers/fileController");
 
+router.post(
+    "/:listingId/upload",
+    fileController.uploadListingFile
+);
+router.post(
+    "/:listingId/replace",
+    fileController.replaceListingFile
+);
 module.exports = router;

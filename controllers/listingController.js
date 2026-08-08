@@ -2,10 +2,8 @@ const axios = require("axios");
 const etsy = require("../config/etsy");
 const etsyService = require("../services/etsyService");
 
-exports.createDraft = async (req,res)=>{
-
+exports.createDraft = async (req, res) => {
     try {
-
         const response = await axios.post(
             `https://openapi.etsy.com/v3/application/shops/${etsy.shopId}/listings`,
             {
@@ -31,21 +29,14 @@ exports.createDraft = async (req,res)=>{
         res.json(response.data);
 
     } catch (err) {
-
-        console.log(err.response?.data);
-
         res.status(500).json(
             err.response?.data || err.message
         );
-
     }
-
 };
 
-exports.getDrafts = async (req,res)=>{
-
+exports.getDrafts = async (req, res) => {
     try {
-
         const response = await axios.get(
             `https://openapi.etsy.com/v3/application/shops/${etsy.shopId}/listings`,
             {
@@ -63,21 +54,14 @@ exports.getDrafts = async (req,res)=>{
         res.json(response.data);
 
     } catch (err) {
-
-        console.log(err.response?.data);
-
         res.status(500).json(
             err.response?.data || err.message
         );
-
     }
-
 };
 
-exports.getMyShop = async (req,res)=>{
-
+exports.getMyShop = async (req, res) => {
     try {
-
         const response = await axios.get(
             "https://openapi.etsy.com/v3/application/users/me",
             {
@@ -91,44 +75,29 @@ exports.getMyShop = async (req,res)=>{
         res.json(response.data);
 
     } catch (err) {
-
-        console.log(err.response?.data);
-
         res.status(500).json(
             err.response?.data || err.message
         );
-
     }
-
 };
 
-exports.getListing = async (req,res)=>{
-
+exports.getListing = async (req, res) => {
     try {
-
-        const listing = await etsyService.getListing(req.params.id);
+        const listing = await etsyService.getListing(
+            req.params.id
+        );
 
         res.json(listing);
 
     } catch (err) {
-
-        console.log(err.response?.data || err);
-
         res.status(500).json(
             err.response?.data || err.message
         );
-
     }
-
 };
 
 exports.updateListing = async (req, res) => {
-
-    console.log("Listing:", req.params.id);
-    console.log("Body:", req.body);
-
     try {
-
         const listing = await etsyService.updateListing(
             req.params.id,
             req.body
@@ -137,34 +106,21 @@ exports.updateListing = async (req, res) => {
         res.json(listing);
 
     } catch (err) {
-
-        console.log(err.response?.status);
-        console.log(err.response?.data || err);
-
         res.status(500).json(
             err.response?.data || err.message
         );
-
     }
-
 };
 
-exports.getInactive = async (req,res)=>{
-
+exports.getInactive = async (req, res) => {
     try {
-
         const listings = await etsyService.getInactiveListings();
 
         res.json(listings);
 
     } catch (err) {
-
-        console.log(err.response?.data || err);
-
         res.status(500).json(
             err.response?.data || err.message
         );
-
     }
-
 };
