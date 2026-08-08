@@ -4,7 +4,7 @@ node_modules/
 # Environment variables
 .env
 
-#old copy 
+# Old local copy
 server copy.js
 
 # Logs
@@ -25,3 +25,10 @@ uploads/
 # Temporary files
 tmp/
 temp/
+
+# Persisted Etsy OAuth tokens - never commit
+data/
+
+# Local test / temporary files
+WHERE_THESE_GO.txt
+test-payload.json

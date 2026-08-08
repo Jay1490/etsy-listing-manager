@@ -3,6 +3,14 @@ require("dotenv").config();
 const express = require("express");
 const app = express();
 
+const etsy = require("./config/etsy");
+
+if (etsy.accessToken) {
+    console.log("Etsy session restored from persisted tokens.");
+} else {
+    console.log("No persisted Etsy session found - login via /auth/login.");
+}
+
 app.use(express.json());
 
 app.get("/", (req, res) => {
@@ -17,6 +25,7 @@ app.use("/listings", require("./routes/listings"));
 app.use("/images", require("./routes/images"));
 app.use("/files", require("./routes/files"));
 app.use("/automation", require("./routes/automation"));
+app.use("/digital", require("./routes/digital"));
 app.use(
     "/properties",
     require("./routes/properties")

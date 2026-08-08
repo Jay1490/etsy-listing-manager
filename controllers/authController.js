@@ -2,6 +2,7 @@ const axios = require("axios");
 const pkceChallenge = require("pkce-challenge").default;
 
 const etsy = require("../config/etsy");
+const tokenStore = require("../config/tokenStore");
 
 exports.login = async (req, res) => {
     const pkce = await pkceChallenge();
@@ -54,6 +55,7 @@ exports.callback = async (req, res) => {
 
         etsy.accessToken = token.data.access_token;
         etsy.refreshToken = token.data.refresh_token;
+        etsy.expiresAt = Date.now() + (token.data.expires_in * 1000);
 
         const me = await axios.get(
             "https://openapi.etsy.com/v3/application/users/me",
@@ -68,8 +70,13 @@ exports.callback = async (req, res) => {
         etsy.userId = me.data.user_id;
         etsy.shopId = me.data.shop_id;
 
+        // Persist so a server restart doesn't force the user back through OAuth
+        tokenStore.persist(etsy);
+
         res.json({
             message: "OAuth Successful",
+            // token value itself is intentionally still returned here (existing
+            // behavior of this endpoint) but never written to logs
             access_token: etsy.accessToken
         });
 
@@ -107,7 +114,7 @@ exports.exportToken = async (req, res) => {
         });
 
     } catch (err) {
-        console.error(err);
+        console.error(err.message);
 
         res.status(500).json({
             error: err.message

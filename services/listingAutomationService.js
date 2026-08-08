@@ -48,11 +48,17 @@ async function updateCompleteListing(listingId, data) {
     }
 
     // 2. Update Etsy listing properties
+    // 2. Update Etsy listing properties
     if (properties && properties.length > 0) {
+
+        const currentListing =
+            await etsyService.getListing(listingId);
+
         result.properties =
             await updateListingProperties(
                 listingId,
-                properties
+                properties,
+                currentListing.taxonomy_id
             );
     }
 
